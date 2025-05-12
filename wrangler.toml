@@ -1,0 +1,6 @@
+name = "cloudflare-pages-vue"
+compatibility_date = "2025-05-07"
+pages_build_output_dir = "dist"
+[vars]
+
+VITE_API_URL = "" 

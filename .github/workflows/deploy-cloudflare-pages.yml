@@ -1,0 +1,40 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build project and clean wrangler.json
+        run: |
+          env
+          npm run build
+          if [ -f dist/wrangler.json ]; then
+            jq 'del(.assets)' dist/wrangler.json > dist/wrangler.tmp.json && mv dist/wrangler.tmp.json dist/wrangler.json
+          fi
+
+      - name: Publish code to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CL_TOKEN }}
+          accountId: ${{ secrets.CL_ACCOUNT }}
+          preCommands: |
+            env
+          command: |
+            pages deploy ./dist --project-name=sayhello --branch=preview
+          # Optional: Enable this if you want to have GitHub Deployments triggered
+          # gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          postCommands: |
+            pwd
+          vars: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
+        
