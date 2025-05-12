@@ -30,7 +30,7 @@ jobs:
           preCommands: |
             env
           command: |
-            pages deploy ./dist --project-name=sayhello --branch=preview
+            pages deploy ./dist --project-name=cloudflare-pages-vue --branch=preview
           # Optional: Enable this if you want to have GitHub Deployments triggered
           # gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           postCommands: |
